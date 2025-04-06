@@ -1,0 +1,51 @@
+# World Wide Web
+The WorldWideWeb (W3) is a wide-area hypermedia information retrieval initiative aiming to give universal access to a large universe of documents.
+
+Everything there is online about W3 is linked directly or indirectly to this document, including an executive summary of the project, Mailing lists , Policy , November's W3 news , Frequently Asked Questions .
+
+What's out there?
+* Pointers to the world's online information, subjects , W3 servers, etc.
+Help
+* on the browser you are using
+Software Products
+* A list of W3 project components and their current state. (e.g. Line Mode ,X11 Viola , NeXTStep , Servers , Tools , Mail robot , Library )
+Technical
+* Details of protocols, formats, program internals etc
+Bibliography
+* Paper documentation on W3 and references.
+People
+* A list of some people involved in the project.
+History
+* A summary of the history of the project.
+How can I help ?
+* If you would like to support the web..
+Getting code
+* Getting the code by anonymous FTP , etc.
+
+### The actual links
+
+=> https://info.cern.ch/hypertext/WWW/WhatIs.html hypermedia
+=> https://info.cern.ch/hypertext/WWW/Summary.html executive summary
+=> https://info.cern.ch/hypertext/WWW/Administration/Mailing/Overview.html Mailing lists
+=> https://info.cern.ch/hypertext/WWW/Policy.html Policy
+=> https://info.cern.ch/hypertext/WWW/News/9211.html W3 news
+=> https://info.cern.ch/hypertext/WWW/FAQ/List.html Frequently Asked Questions
+=> https://info.cern.ch/hypertext/DataSources/Top.html What's out there?
+=> https://info.cern.ch/hypertext/DataSources/bySubject/Overview.html subjects
+=> https://info.cern.ch/hypertext/DataSources/WWW/Servers.html W3 servers
+=> https://info.cern.ch/hypertext/WWW/Help.html Help
+=> https://info.cern.ch/hypertext/WWW/Status.html Software Products
+=> https://info.cern.ch/hypertext/WWW/LineMode/Browser.html Line Mode
+=> https://info.cern.ch/hypertext/WWW/Status.html#35 Viola
+=> https://info.cern.ch/hypertext/WWW/NeXT/WorldWideWeb.html NeXTStep
+=> https://info.cern.ch/hypertext/WWW/Daemon/Overview.html Servers
+=> https://info.cern.ch/hypertext/WWW/Tools/Overview.html Tools
+=> https://info.cern.ch/hypertext/WWW/MailRobot/Overview.html Mail robot
+=> https://info.cern.ch/hypertext/WWW/Status.html#57 Library
+=> https://info.cern.ch/hypertext/WWW/Technical.html Technical
+=> https://info.cern.ch/hypertext/WWW/Bibliography.html Bibliography
+=> https://info.cern.ch/hypertext/WWW/People.html People
+=> https://info.cern.ch/hypertext/WWW/History.html History
+=> https://info.cern.ch/hypertext/WWW/Helping.html How can I help?
+=> https://info.cern.ch/hypertext/README.html Getting code
+=> https://info.cern.ch/hypertext/WWW/LineMode/Defaults/Distribution.html anonymous FTP
