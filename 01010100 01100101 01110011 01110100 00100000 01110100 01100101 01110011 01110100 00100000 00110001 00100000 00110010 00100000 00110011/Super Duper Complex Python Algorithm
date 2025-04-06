@@ -1,0 +1,120 @@
+# Super Duper Complex Python Algorithm
+
+``` import math
+import random
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
+
+# Helper functions for distance and 2-opt swap.
+def euclidean_distance(p1, p2):
+    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])
+
+def total_distance(tour, cities):
+    return sum(euclidean_distance(cities[tour[i]], cities[tour[(i + 1) % len(tour)]])
+               for i in range(len(tour)))
+
+def two_opt_swap(tour, i, k):
+    new_tour = tour[:i] + tour[i:k + 1][::-1] + tour[k + 1:]
+    return new_tour
+
+# The TSPProblem class encapsulates the problem data.
+class TSPProblem:
+    def __init__(self, cities):
+        self.cities = cities
+        self.num_cities = len(cities)
+    
+    def random_tour(self):
+        tour = list(range(self.num_cities))
+        random.shuffle(tour)
+        return tour
+
+# The Solver class uses simulated annealing with embedded 2-opt improvement.
+class TSPSolver:
+    def __init__(self, problem, init_temp=1000, cooling_rate=0.995, min_temp=1e-3, max_iter=10000):
+        self.problem = problem
+        self.init_temp = init_temp
+        self.cooling_rate = cooling_rate
+        self.min_temp = min_temp
+        self.max_iter = max_iter
+        self.best_tour = None
+        self.best_distance = float('inf')
+        self.lock = threading.Lock()  # For thread-safe update of best tour
+    
+    def accept_probability(self, delta, temperature):
+        # Accept worse solutions with a probability that decreases with temperature.
+        return math.exp(-delta / temperature) if delta > 0 else 1
+    
+    def evaluate_neighbor(self, current_tour, temperature):
+        # Use a local 2-opt move to generate a neighbor.
+        n = len(current_tour)
+        i, k = sorted(random.sample(range(n), 2))
+        new_tour = two_opt_swap(current_tour, i, k)
+        new_distance = total_distance(new_tour, self.problem.cities)
+        current_distance = total_distance(current_tour, self.problem.cities)
+        delta = new_distance - current_distance
+        return new_tour, new_distance, delta
+    
+    def anneal(self):
+        current_tour = self.problem.random_tour()
+        current_distance = total_distance(current_tour, self.problem.cities)
+        best_local_tour = current_tour
+        best_local_distance = current_distance
+        
+        temperature = self.init_temp
+        iteration = 0
+        
+        # Use a thread pool for evaluating neighbor moves in parallel.
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            while temperature > self.min_temp and iteration < self.max_iter:
+                # Submit several neighbor evaluations in parallel.
+                futures = [executor.submit(self.evaluate_neighbor, current_tour, temperature)
+                           for _ in range(4)]
+                
+                # Wait for all moves and pick the best improvement among them.
+                for future in futures:
+                    neighbor_tour, neighbor_distance, delta = future.result()
+                    # Acceptance decision based on simulated annealing criterion.
+                    if delta < 0 or random.random() < self.accept_probability(delta, temperature):
+                        current_tour, current_distance = neighbor_tour, neighbor_distance
+                        # Check if this is the best found so far.
+                        if current_distance < best_local_distance:
+                            best_local_tour = current_tour
+                            best_local_distance = current_distance
+                # Cooling schedule.
+                temperature *= self.cooling_rate
+                iteration += 1
+
+                # Thread-safe global best update.
+                with self.lock:
+                    if best_local_distance < self.best_distance:
+                        self.best_distance = best_local_distance
+                        self.best_tour = best_local_tour[:]
+                
+                if iteration % 1000 == 0:
+                    print(f"Iteration {iteration}: Best distance so far = {self.best_distance:.2f}")
+        return self.best_tour, self.best_distance
+
+# A complex main function that sets up the problem and runs the solver.
+def main():
+    # Generate random cities within a 1000x1000 grid.
+    num_cities = 50
+    cities = [(random.uniform(0, 1000), random.uniform(0, 1000)) for _ in range(num_cities)]
+    
+    # Create the TSP problem instance.
+    problem = TSPProblem(cities)
+    
+    # Initialize the solver with a high initial temperature and slow cooling.
+    solver = TSPSolver(problem, init_temp=1000, cooling_rate=0.995, min_temp=1e-3, max_iter=10000)
+    
+    start_time = time.time()
+    best_tour, best_distance = solver.anneal()
+    end_time = time.time()
+    
+    print("\nFinal best tour:")
+    print(best_tour)
+    print(f"Final best distance: {best_distance:.2f}")
+    print(f"Time taken: {end_time - start_time:.2f} seconds")
+    
+if __name__ == '__main__':
+    main()
